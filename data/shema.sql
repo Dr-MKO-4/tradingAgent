@@ -69,3 +69,32 @@ CREATE TABLE agent_performance (
   num_incorrect_trades INT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- 1.1 Passer tous les TIMESTAMP en timestamptz
+ALTER TABLE indicators      ALTER COLUMN timestamp TYPE timestamptz USING timestamp AT TIME ZONE 'UTC';
+ALTER TABLE simulations     ALTER COLUMN start_date TYPE timestamptz USING start_date AT TIME ZONE 'UTC';
+ALTER TABLE simulations     ALTER COLUMN end_date   TYPE timestamptz USING end_date   AT TIME ZONE 'UTC';
+ALTER TABLE transactions    ALTER COLUMN timestamp TYPE timestamptz USING timestamp AT TIME ZONE 'UTC';
+ALTER TABLE agents          ALTER COLUMN created_at TYPE timestamptz DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE agent_performance ALTER COLUMN created_at TYPE timestamptz DEFAULT CURRENT_TIMESTAMP;
+
+-- 1.2 Empêcher les doublons d’indicateurs (crypto_id + timestamp)
+ALTER TABLE indicators
+  ADD CONSTRAINT uq_indicators_crypto_time UNIQUE (crypto_id, timestamp);
+
+-- 1.3 Harmoniser les types numériques pour les prix & indicateurs
+--    On choisit NUMERIC pour les montants financiers (prix, profits) et FLOAT pour les ratios techniques
+ALTER TABLE indicators
+  ALTER COLUMN price TYPE numeric(18,8) USING price::numeric(18,8);
+ALTER TABLE transactions
+  ALTER COLUMN price TYPE numeric(18,8) USING price;
+ALTER TABLE simulations
+  ALTER COLUMN total_profit TYPE numeric(18,8) USING total_profit;
+ALTER TABLE simulations
+  ALTER COLUMN reward TYPE numeric(18,8) USING reward;
+
+-- 1.4 Contrainte ENUM pour l’action de transaction
+CREATE TYPE trade_action AS ENUM ('BUY','SELL');
+ALTER TABLE transactions
+  ALTER COLUMN action TYPE trade_action USING UPPER(action)::trade_action;
+

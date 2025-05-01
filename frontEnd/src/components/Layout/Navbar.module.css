@@ -1,0 +1,23 @@
+/* src/components/Layout/Navbar.module.css*/
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+.brand a {
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+.links a {
+  text-decoration: none;
+  font-size: 1rem;
+}

@@ -1,0 +1,27 @@
+// Chemin : src/index.scss
+// (renommé depuis index.css pour gérer du SCSS)
+// Importe le fichier sans underscore, Vite/sass plugin le trouvera automatiquement
+@import './styles/variables';
+
+body {
+  margin: 0;
+  font-family: $font-family;
+  background-color: $secondary-color;
+  color: $primary-color;
+}
+
+.app {
+  padding: 1rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  border: 1px solid $primary-color;
+  padding: 0.5rem;
+  text-align: left;
+}

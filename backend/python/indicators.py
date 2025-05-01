@@ -1,4 +1,4 @@
-mport pandas as pd
+import pandas as pd
 import ta
 import psycopg2
 from psycopg2.extras import RealDictCursor
@@ -6,9 +6,9 @@ import os
 
 # Configuration DB (modifie avec tes valeurs)
 DB_CONFIG = {
-    'dbname': 'ta_base',
-    'user': 'ton_user',
-    'password': 'ton_mdp',
+    'dbname': 'tradingAgent',
+    'user': 'miguel',
+    'password': 'Mkomegmbdysdia4',
     'host': 'localhost',
     'port': '5432'
 }

@@ -97,4 +97,3 @@ ALTER TABLE simulations
 CREATE TYPE trade_action AS ENUM ('BUY','SELL');
 ALTER TABLE transactions
   ALTER COLUMN action TYPE trade_action USING UPPER(action)::trade_action;
-

@@ -1,0 +1,28 @@
+{
+    "best_params": {
+        "WINDOW_SIZE": 29,
+        "MAX_STEPS": 191,
+        "INITIAL_EPS": 1.0,
+        "MIN_EPS": 0.11389832590360968,
+        "DECAY_RATE": 0.8733767262878772,
+        "BUFFER_SIZE": 2000,
+        "BATCH_SIZE": 89,
+        "LR": 0.0004885273148933994,
+        "GAMMA": 0.8114005633711676,
+        "TARGET_FREQ": 500,
+        "HIDDEN_DIM": 128
+    },
+    "best_score": NaN,
+    "history": [
+        5.974905118617471,
+        31.392478308478925,
+        NaN,
+        NaN,
+        NaN,
+        NaN,
+        -4922387919586.13,
+        NaN,
+        NaN,
+        NaN
+    ]
+}

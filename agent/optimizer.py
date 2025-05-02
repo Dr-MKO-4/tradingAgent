@@ -189,7 +189,7 @@ if __name__ == "__main__":
     ind_tr     = IndicatorTransformer()
     normalizer = Normalizer()
     pipeline   = DataPipeline(fetcher, ind_tr, normalizer)
-    SYMBOL     = "BTCUSDT"
+    SYMBOL     = "ADAUSDT"
 
 
 

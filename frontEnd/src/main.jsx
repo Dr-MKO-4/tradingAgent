@@ -1,35 +1,14 @@
-// src/main.jsx
+// src/index.jsx
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import App from './App.jsx';
-import './index.module.css';
+import ReactDOM from 'react-dom/client';
+import App from './App';
+import './styles/globals.scss';
+//import reportWebVitals from './reportWebVitals';
 
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 
-// ChartJS global config
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-
-createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// pour mesurer les performances : 
+//reportWebVitals(console.log);

@@ -1,0 +1,14 @@
+// src/assets/styles/global.scss
+@use './variables' as *;   // Charge toutes les variables dans le scope courant
+
+body {
+  margin: 0;
+  font-family: $font-family;
+  background-color: $secondary-color;
+  color: $primary-color;
+}
+
+a {
+  color: $link-color;
+  text-decoration: none;
+}

@@ -1,0 +1,15 @@
+// custom.scss
+$theme-colors: (
+  "primary": #1f2937, // gris foncé
+  "secondary": #3b82f6, // bleu vif
+  "success": #10b981, // vert émeraude
+  "danger": #ef4444,
+  "warning": #f59e0b,
+  "info": #06b6d4,
+  "light": #f3f4f6,
+  "dark": #111827
+);
+$body-bg: #111827;
+$body-color: #f9fafb;
+
+@import 'bootstrap/scss/bootstrap';

@@ -1,0 +1,37 @@
+{
+  "_note": "Hand-set weights of a small Dueling Q network (same topology as agent/networks/dueling_q_network.py: trunk Linear+ReLU, value and advantage streams Linear+ReLU+Linear). Pedagogical policy, NOT the trained model.",
+  "features": ["ret_1", "ret_5", "rsi_14", "close_vs_sma20", "close_vs_sma50", "ema12_vs_ema26", "macd_hist", "position", "cash"],
+  "hidden": ["trend_up", "trend_down", "oversold", "overbought", "momentum_up", "momentum_down", "invested", "in_cash"],
+  "actions": ["hold", "buy", "sell"],
+  "feature": {
+    "W": [
+      [0, 0, 0, 0, 0.6, 1.0, 0.4, 0, 0],
+      [0, 0, 0, 0, -0.6, -1.0, -0.4, 0, 0],
+      [0, 0, -1.2, 0, 0, 0, 0, 0, 0],
+      [0, 0, 1.2, 0, 0, 0, 0, 0, 0],
+      [0.5, 0.7, 0, 0.3, 0, 0, 0, 0, 0],
+      [-0.5, -0.7, 0, -0.3, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 1, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 1]
+    ],
+    "b": [0, 0, -0.36, -0.36, 0, 0, 0, 0]
+  },
+  "value": {
+    "W1": "identity",
+    "b1": [0, 0, 0, 0, 0, 0, 0, 0],
+    "W2": [[0.3, -0.3, 0.1, -0.1, 0.2, -0.2, 0, 0]],
+    "b2": [0]
+  },
+  "advantage": {
+    "W1": "identity",
+    "b1": [0, 0, 0, 0, 0, 0, 0, 0],
+    "W2": [
+      [0.1, 0.1, 0, 0, 0, 0, 0, 0],
+      [1.2, -1.0, 0.4, -0.6, 0.2, -0.2, -0.75, 0.35],
+      [-1.0, 1.2, -0.4, 0.6, -0.2, 0.2, 0.35, -0.75]
+    ],
+    "b2": [0.3, -0.25, -0.25]
+  },
+  "temperature": 0.12,
+  "epsilon": { "start": 0.2, "min": 0.02, "decay": 0.99 }
+}

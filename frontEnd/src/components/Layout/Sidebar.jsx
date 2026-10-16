@@ -7,6 +7,9 @@ import {
 import { useSimulation } from '../../contexts/SimulationContext';
 import CryptoSelector from '../Simulation/CryptoSelector';
 import Brand from './Brand';
+import { IS_DEMO } from '../../lib/mode';
+import { useLiveSim } from '../../contexts/LiveSimContext';
+import { ASSETS } from '../../lib/sim/market';
 
 export const NAV = [
   { to: '/', label: 'Tableau de bord', icon: LuLayoutDashboard, end: true },
@@ -18,6 +21,7 @@ export const NAV = [
 
 export default function Sidebar({ show, onHide }) {
   const { filters, setFilters } = useSimulation();
+  const live = useLiveSim();
   const ref = useRef(null);
 
   // Génère dynamiquement l'agent en fonction de la crypto
@@ -58,15 +62,21 @@ export default function Sidebar({ show, onHide }) {
           <div className="nav-label" style={{ paddingLeft: 8 }}>Filtres</div>
           <div className="field">
             <label htmlFor="filter-crypto">Crypto</label>
-            <CryptoSelector
-              id="filter-crypto"
-              value={filters.crypto}
-              onChange={(c) => setFilters((f) => ({ ...f, crypto: c, agent: `DQN ${c}` }))}
-            />
+            {IS_DEMO ? (
+              <select id="filter-crypto" className="select" value={live.config.asset} onChange={(e) => live.reset({ asset: e.target.value })}>
+                {ASSETS.map((a) => <option key={a.symbol} value={a.symbol}>{a.symbol} · {a.name}</option>)}
+              </select>
+            ) : (
+              <CryptoSelector
+                id="filter-crypto"
+                value={filters.crypto}
+                onChange={(c) => setFilters((f) => ({ ...f, crypto: c, agent: `DQN ${c}` }))}
+              />
+            )}
           </div>
           <div className="field">
             <label htmlFor="filter-agent">Agent</label>
-            <input id="filter-agent" className="input mono" value={dynamicAgent} readOnly />
+            <input id="filter-agent" className="input mono" value={IS_DEMO ? `DQN ${live.config.asset} · simulé` : dynamicAgent} readOnly />
           </div>
         </div>
 

@@ -9,9 +9,16 @@ import Kpi from '../components/UI/Kpi';
 import ActionPill from '../components/UI/ActionPill';
 import { EmptyState, ErrorState } from '../components/UI/State';
 import { money, pct, num, trend, seriesStats, isNum } from '../lib/format';
+import { IS_DEMO } from '../lib/mode';
+import { useLiveSim } from '../contexts/LiveSimContext';
 
 const Results = () => {
-  const { status, progress, results, error, filters } = useSimulation();
+  const ctx = useSimulation();
+  const live = useLiveSim();
+  const { status, progress, error } = ctx;
+  // In demo mode the results are those of the current live session.
+  const results = IS_DEMO ? live.sim.toResults() : ctx.results;
+  const filters = IS_DEMO ? { crypto: live.sim.asset.symbol } : ctx.filters;
 
   if (status === 'running') {
     return (
@@ -68,7 +75,7 @@ const Results = () => {
       <div className="page-head enter">
         <div>
           <h1>Résultats</h1>
-          <p>Agent DQN · {filters.crypto}/USD · {portfolio.length} points</p>
+          <p>Agent DQN{IS_DEMO ? ' (politique simulée, session en cours)' : ''} · {filters.crypto}/USD · {portfolio.length} points</p>
         </div>
         <div className="actions">
           <Link to="/simulation" className="btn btn-primary"><LuPlay aria-hidden="true" />Nouvelle simulation</Link>

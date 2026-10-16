@@ -6,6 +6,9 @@ import { listSimulations } from '../services/simulation';
 import Loader from '../components/UI/Loader';
 import { EmptyState, ErrorState } from '../components/UI/State';
 import { dateTime, pct, trend, isNum } from '../lib/format';
+import { IS_DEMO } from '../lib/mode';
+import { loadSessions } from '../lib/sim/history';
+import { useLiveSim } from '../contexts/LiveSimContext';
 
 function errorText(err) {
   if (err?.response?.status === 404) return "La route GET /api/simulation n'existe pas sur le backend (404).";
@@ -20,9 +23,17 @@ export default function History() {
   const [loading, setLoading] = useState(true);
   const [asset, setAsset] = useState('all');
 
+  const live = useLiveSim();
   const load = useCallback(() => {
     setLoading(true);
     setError(null);
+    if (IS_DEMO) {
+      // Demo mode: sessions of the live simulation, stored in this browser.
+      live.persist();
+      setList(loadSessions());
+      setLoading(false);
+      return;
+    }
     listSimulations()
       .then((data) => {
         if (!Array.isArray(data)) throw new Error("Réponse inattendue de l'API (liste attendue).");
@@ -30,6 +41,7 @@ export default function History() {
       })
       .catch((err) => setError(errorText(err)))
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => { load(); }, [load]);
@@ -48,7 +60,7 @@ export default function History() {
       <div className="page-head enter">
         <div>
           <h1>Historique des simulations</h1>
-          <p>Toutes les exécutions enregistrées par le backend.</p>
+          <p>{IS_DEMO ? 'Sessions de simulation en direct enregistrées dans ce navigateur.' : 'Toutes les exécutions enregistrées par le backend.'}</p>
         </div>
         <div className="actions">
           <button type="button" className="btn" onClick={load} disabled={loading}>
@@ -91,7 +103,7 @@ export default function History() {
             title="Aucune simulation"
             actions={<Link to="/simulation" className="btn btn-primary"><LuPlay aria-hidden="true" />Lancer une simulation</Link>}
           >
-            Les simulations lancées depuis l'application apparaîtront ici.
+            {IS_DEMO ? 'Les sessions de la simulation en direct apparaîtront ici après quelques bougies.' : "Les simulations lancées depuis l'application apparaîtront ici."}
           </EmptyState>
         )}
 
@@ -101,7 +113,7 @@ export default function History() {
               <table className="table">
                 <thead>
                   <tr>
-                    <th>ID</th><th>Date</th><th>Actif</th><th>Agent</th><th className="r">Rendement</th><th><span className="sr-only">Actions</span></th>
+                    <th>ID</th><th>Date</th><th>Actif</th><th>Agent</th>{IS_DEMO && <><th className="r">Bougies</th><th className="r">Trades</th><th className="r">Buy &amp; Hold</th></>}<th className="r">Rendement</th><th><span className="sr-only">Actions</span></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -113,6 +125,13 @@ export default function History() {
                         <td className="num">{dateTime(s.date)}</td>
                         <td>{s.crypto ? <span className="asset"><span className="asset-icon" aria-hidden="true">{s.crypto}</span>{s.crypto}</span> : '-'}</td>
                         <td className="mono">{s.agent || 'DQN'}</td>
+                        {IS_DEMO && (
+                          <>
+                            <td className="r num">{s.candles ?? '-'}</td>
+                            <td className="r num">{s.trades ?? '-'}</td>
+                            <td className={`r num ${isNum(s.benchReturn) ? trend(s.benchReturn) : 'flat'}`}>{isNum(s.benchReturn) ? pct(s.benchReturn) : '-'}</td>
+                          </>
+                        )}
                         <td className={`r num ${isNum(ret) ? trend(ret) : 'flat'}`}>{isNum(ret) ? pct(ret) : '-'}</td>
                         <td className="r">
                           <Link to="/results" className="btn btn-ghost" style={{ height: 30 }} aria-label={`Voir les détails de la simulation ${s.id}`}>

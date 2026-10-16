@@ -6,6 +6,8 @@ import { useTheme } from '../../contexts/ThemeContext';
 import { useSimulation } from '../../contexts/SimulationContext';
 import { NAV } from './Sidebar';
 import Brand from './Brand';
+import { IS_DEMO } from '../../lib/mode';
+import { useLiveSim } from '../../contexts/LiveSimContext';
 
 const STATUS = {
   idle: 'Agent inactif',
@@ -16,7 +18,10 @@ const STATUS = {
 
 export default function Header({ onMenuToggle }) {
   const { theme, toggle } = useTheme();
-  const { status, progress } = useSimulation();
+  const sim = useSimulation();
+  const live = useLiveSim();
+  const status = IS_DEMO ? (live.playing ? 'running' : 'idle') : sim.status;
+  const { progress } = sim;
   const { pathname } = useLocation();
   const current = NAV.find((n) => (n.end ? pathname === n.to : pathname.startsWith(n.to)));
 
@@ -33,8 +38,8 @@ export default function Header({ onMenuToggle }) {
       <div className="topbar-spacer" />
       <span className="status-pill" data-status={status} role="status" aria-live="polite">
         <span className="dot" aria-hidden="true" />
-        <span className="label-long">{STATUS[status] || STATUS.idle}</span>
-        {status === 'running' && <span className="num">{Math.round(progress)} %</span>}
+        <span className="label-long">{IS_DEMO ? (live.playing ? 'Simulation en direct' : 'Simulation en pause') : (STATUS[status] || STATUS.idle)}</span>
+        {!IS_DEMO && status === 'running' && <span className="num">{Math.round(progress)} %</span>}
       </span>
       <button
         type="button"

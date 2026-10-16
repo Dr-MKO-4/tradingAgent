@@ -2,6 +2,8 @@
 import React from 'react';
 import { LuMoon, LuSun, LuGithub } from 'react-icons/lu';
 import { useTheme } from '../contexts/ThemeContext';
+import { IS_DEMO } from '../lib/mode';
+import { clearSessions } from '../lib/sim/history';
 
 export default function Settings() {
   const { theme, setTheme } = useTheme();
@@ -31,8 +33,18 @@ export default function Settings() {
           <div className="card-head"><h2 id="api-title">API</h2></div>
           <div className="card-body summary">
             <dl>
-              <div className="kv"><dt>Base URL</dt><dd>/api</dd></div>
-              <div className="kv"><dt>Proxy de développement</dt><dd>localhost:5000</dd></div>
+              {IS_DEMO ? (
+                <>
+                  <div className="kv"><dt>Mode</dt><dd>Démo · simulation en direct</dd></div>
+                  <div className="kv"><dt>Backend</dt><dd>aucune requête</dd></div>
+                  <div className="kv"><dt>Historique local</dt><dd><button type="button" className="btn btn-ghost" style={{ height: 26 }} onClick={clearSessions}>Effacer</button></dd></div>
+                </>
+              ) : (
+                <>
+                  <div className="kv"><dt>Base URL</dt><dd>/api</dd></div>
+                  <div className="kv"><dt>Proxy de développement</dt><dd>localhost:5000</dd></div>
+                </>
+              )}
               <div className="kv"><dt>Code source</dt><dd><a href="https://github.com/Dr-MKO-4/tradingAgent" target="_blank" rel="noreferrer"><LuGithub aria-hidden="true" style={{ verticalAlign: -2 }} /> Dr-MKO-4/tradingAgent</a></dd></div>
             </dl>
           </div>

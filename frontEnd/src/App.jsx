@@ -2,6 +2,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { SimulationProvider } from './contexts/SimulationContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { LiveSimProvider } from './contexts/LiveSimContext';
+import { IS_DEMO } from './lib/mode';
+import DemoBanner from './components/Live/DemoBanner';
+import LiveDashboard from './pages/LiveDashboard';
+import LiveSimulation from './pages/LiveSimulation';
 import Header from './components/Layout/Header';
 import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
@@ -26,9 +31,11 @@ export default function App() {
   return (
     <ThemeProvider>
       <SimulationProvider>
+        <LiveSimProvider>
         <BrowserRouter>
           <ScrollToTop />
           <a href="#main" className="skip-link">Aller au contenu</a>
+          {IS_DEMO && <DemoBanner />}
           <div className="shell">
             {/* Sidebar desktop et tiroir mobile */}
             <Sidebar show={showSidebar} onHide={hide} />
@@ -37,8 +44,8 @@ export default function App() {
               <Header onMenuToggle={() => setShowSidebar((v) => !v)} />
               <main id="main" className="content" tabIndex={-1}>
                 <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/simulation" element={<SimulationPage />} />
+                  <Route path="/" element={IS_DEMO ? <LiveDashboard /> : <Home />} />
+                  <Route path="/simulation" element={IS_DEMO ? <LiveSimulation /> : <SimulationPage />} />
                   <Route path="/results" element={<Results />} />
                   <Route path="/history" element={<History />} />
                   <Route path="/settings" element={<Settings />} />
@@ -49,6 +56,7 @@ export default function App() {
             </div>
           </div>
         </BrowserRouter>
+        </LiveSimProvider>
       </SimulationProvider>
     </ThemeProvider>
   );

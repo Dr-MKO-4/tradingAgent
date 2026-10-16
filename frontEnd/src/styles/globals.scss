@@ -1,0 +1,18 @@
+// src/styles/globals.scss
+@import './variables.scss';
+:root[data-theme='light'] {
+  background: $color-light-bg;
+  color: $color-light-text;
+}
+:root[data-theme='dark'] {
+  background: $color-dark-bg;
+  color: $color-dark-text;
+}
+body, .app { margin: 0; font-family: sans-serif;width: 100%;   }
+.main { display: flex; }
+.content { flex: 1; padding: 1rem; }
+.hover-bg-primary:hover {
+  background-color: #0d6efd !important;
+  color: white !important;
+  transition: all 0.2s ease-in-out;
+}

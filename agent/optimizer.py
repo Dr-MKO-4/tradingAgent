@@ -189,43 +189,45 @@ if __name__ == "__main__":
     ind_tr     = IndicatorTransformer()
     normalizer = Normalizer()
     pipeline   = DataPipeline(fetcher, ind_tr, normalizer)
-    SYMBOL     = "ADAUSDT"
+    SYMBOLS    = ["BTCUSDT", "ETHUSDT", "BNBUSDT"]
 
 
 
+    for SYMBOL in SYMBOLS:
+        print('----------------------{}----------------------'.format(SYMBOL))
+        # grille d'hyper-paramètres
+        param_grid = {
+            'WINDOW_SIZE': [30,50,70,90,100],
+            'MAX_STEPS':    [200,300,400,500],
+            'INITIAL_EPS':  [1.0],
+            'MIN_EPS':      [0.01,0.05,0.1],
+            'DECAY_RATE':   [0.99,0.995,0.999],
+            'BUFFER_SIZE':  [1000,2000,3000,5000],
+            'BATCH_SIZE':   [32,64,128],
+            'LR':           [1e-3,5e-4,1e-4],
+            'GAMMA':        [0.9,0.95,0.99],
+            'TARGET_FREQ':  [200,500,700,1000],
+            'HIDDEN_DIM':   [32,64,128]
+        }
 
-    # grille d'hyper-paramètres
-    param_grid = {
-        'WINDOW_SIZE': [30,50,70,90,100],
-        'MAX_STEPS':    [200,300,400,500],
-        'INITIAL_EPS':  [1.0],
-        'MIN_EPS':      [0.01,0.05,0.1],
-        'DECAY_RATE':   [0.99,0.995,0.999],
-        'BUFFER_SIZE':  [1000,2000,3000,5000],
-        'BATCH_SIZE':   [32,64,128],
-        'LR':           [1e-3,5e-4,1e-4],
-        'GAMMA':        [0.9,0.95,0.99],
-        'TARGET_FREQ':  [200,500,700,1000],
-        'HIDDEN_DIM':   [32,64,128]
-    }
+        # tuner
+        tuner = RL_Heuristique(
+            param_grid=param_grid,
+            pipeline=pipeline,
+            symbol=SYMBOL,
+            env_kwargs={'transaction_cost':0.001, 'max_data':7000},
+            eval_episodes=4,
+            elite_size=3,
+            candidates_size=10
+            ,
+            tournament_size=4,
+            mutation_rate=0.15,
+            perturbation=0.2,
+            generations=10
+        )
+        
+        best_params, best_score = tuner.run(save_path=f'./models/best_hyperparams_{SYMBOL}.json')
 
-    # tuner
-    tuner = RL_Heuristique(
-        param_grid=param_grid,
-        pipeline=pipeline,
-        symbol=SYMBOL,
-        env_kwargs={'transaction_cost':0.001, 'max_data':7000},
-        eval_episodes=4,
-        elite_size=3,
-        candidates_size=20,
-        tournament_size=4,
-        mutation_rate=0.15,
-        perturbation=0.2,
-        generations=10
-    )
-    
-    best_params, best_score = tuner.run(save_path=f'./models/best_hyperparams_{SYMBOL}.json')
-
-    print("\nMeilleurs hyper‑paramètres trouvés :")
-    print(best_params)
-    print("Score moyen :", best_score)
+        print("\nMeilleurs hyper‑paramètres trouvés :")
+        print(best_params)
+        print("Score moyen :", best_score)

@@ -1,10 +1,19 @@
+# Python
 __pycache__/
 *.py[cod]
+*.egg
 .env
 venv/
 *.ipynb_checkpoints
+
+# Node
 node_modules/
+npm-debug.log
 dist/
+
+# VSCode
 .vscode/
+
+# OS
 .DS_Store
 Thumbs.db

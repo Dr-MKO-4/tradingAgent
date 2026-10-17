@@ -1,0 +1,17 @@
+setup.py
+agents/__init__.py
+agents/dqn_agent.py
+buffers/__init__.py
+buffers/prioritized_replay.py
+environments/__init__.py
+environments/crypto_env.py
+networks/__init__.py
+networks/dueling_q_network.py
+pipelines/__init__.py
+pipelines/data_pipeline.py
+tradingAgent.egg-info/PKG-INFO
+tradingAgent.egg-info/SOURCES.txt
+tradingAgent.egg-info/dependency_links.txt
+tradingAgent.egg-info/top_level.txt
+tuning/__init__.py
+tuning/rl_heuristique.py

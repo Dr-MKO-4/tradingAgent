@@ -1,0 +1,16 @@
+:root {
+    --color-blue:   #0074D9;
+    --color-purple: #6A0DAF;
+    --color-magenta:#D81159;
+    --color-red:    #FF4136;
+    --color-orange: #FF851B;
+    --color-yellow: #FFDC00;
+    --color-dark:   #111111;
+  
+    /* accents / backgrounds */
+    --bg-main:      var(--color-dark);
+    --text-main:    white;
+    --btn-primary:  var(--color-blue);
+    --btn-hover:    var(--color-magenta);
+  }
+  
